@@ -15,7 +15,7 @@ public class ExportUtil {
   }
 
   void doExport() throws IOException, DocumentException {
-    Document document = new Document();
+    Document document = new Document(PageSize.A4, 20, 20, 100, 40);
     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("./output/export.pdf"));
     writer.setPageEvent(new HeaderFooterHelper());
 
@@ -26,8 +26,8 @@ public class ExportUtil {
 
     PdfPTable table = new PdfPTable(3);
     table.setWidthPercentage(100); // 宽度100%填充
-    table.setSpacingBefore(10f); // 前间距
-    table.setSpacingAfter(10f); // 后间距
+//    table.setSpacingBefore(10f); // 前间距
+//    table.setSpacingAfter(10f); // 后间距
 
     List<PdfPRow> listRow = table.getRows();
     //设置列宽
