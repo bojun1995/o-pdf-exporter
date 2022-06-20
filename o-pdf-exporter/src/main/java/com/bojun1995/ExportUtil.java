@@ -10,8 +10,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+
 
 public class ExportUtil {
 
@@ -22,17 +24,28 @@ public class ExportUtil {
 
   public void getConfigByExcelTmpl(String tmplPath) {
     try {
-      XSSFWorkbook templateFile = new XSSFWorkbook(new FileInputStream(new File(tmplPath)));
-      XSSFSheet sheet = templateFile.getSheetAt(0);
+      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File(tmplPath)));
+      XSSFSheet sheet = workbook.getSheetAt(0);
       Iterator<Row> rowIterator = sheet.rowIterator();
       while (rowIterator.hasNext()) {
         Row row = rowIterator.next();
         Iterator<Cell> cellIterator = row.cellIterator();
         while (cellIterator.hasNext()) {
           Cell cell = cellIterator.next();
-          System.out.println(cell);
+          if ("${stationName}".equals(cell.toString())) {
+            cell.setCellValue("福能电厂");
+          }
         }
       }
+      FileOutputStream out = new FileOutputStream("./output/template-out.xlsx");
+      workbook.write(out);
+      out.close();
+
+//      XWPFDocument xwpfDocument = new XWPFDocument();
+//      PdfOptions options = PdfOptions.create();
+//      OutputStream out = new FileOutputStream("D:\\ceshi.pdf");
+//      PdfConverter.getInstance().convert(xwpfDocument, out, options);
+//
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -46,6 +59,7 @@ public class ExportUtil {
 //    writer.setPageEvent(new HeaderFooterHelper());
 //
 //    document.open();
+//    document.add(new Paragraph("HD content here"));
 //
 //    BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
 //    Font cnFont = new Font(bfChinese);
